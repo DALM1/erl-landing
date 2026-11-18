@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+    Manifeste d'installation OTA (Over-The-Air) pour ERL sur iPhone.
+    - L'URL de l'IPA utilise le raccourci GitHub "latest" : elle pointe toujours
+      vers le dernier asset ERL.ipa publie dans la release, sans mise a jour manuelle.
+    - bundle-identifier DOIT correspondre exactement a celui de l'app (app.json).
+    - bundle-version est indicatif (l'OS lit la version reelle dans l'IPA).
+    - L'IPA doit etre signe pour une distribution OTA (ad-hoc avec l'UDID de
+      l'appareil, ou certificat entreprise). Un binaire App Store ne s'installe pas ici.
+-->
+<plist version="1.0">
+<dict>
+    <key>items</key>
+    <array>
+        <dict>
+            <key>assets</key>
+            <array>
+                <dict>
+                    <key>kind</key>
+                    <string>software-package</string>
+                    <key>url</key>
+                    <string>https://github.com/DALM1/erl-landing/releases/latest/download/ERL.ipa</string>
+                </dict>
+            </array>
+            <key>metadata</key>
+            <dict>
+                <key>bundle-identifier</key>
+                <string>com.erl.mobile</string>
+                <key>bundle-version</key>
+                <string>1.0.1</string>
+                <key>kind</key>
+                <string>software</string>
+                <key>title</key>
+                <string>ERL</string>
+            </dict>
+        </dict>
+    </array>
+</dict>
+</plist>
