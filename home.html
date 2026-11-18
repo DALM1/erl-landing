@@ -609,6 +609,16 @@
                 download: 'Download',
                 install_ios: 'Install on iPhone',
                 ios_fallback: 'Installation not working? Download the .ipa directly',
+                install_testflight: 'Install via TestFlight',
+                ota_fallback: 'TestFlight not working? Install the .ipa directly',
+                testflight_steps: [
+                    'Open this page in <strong>Safari</strong> on your iPhone.',
+                    'Tap <strong>Install via TestFlight</strong>.',
+                    'The <strong>TestFlight</strong> app opens. If it is not installed, the App Store opens first — install it, then tap the link again.',
+                    'Tap <strong>Install</strong> to get ERL.',
+                    'Launch ERL from your home screen.'
+                ],
+                testflight_note: "TestFlight is Apple's official beta distribution. No UDID or provisioning profile needed.",
                 feature1_title: 'Live messages',
                 feature1_desc: 'Instant conversations with real-time notifications.',
                 feature2_title: 'Voice & video calls',
@@ -645,6 +655,16 @@
                 download: '下载',
                 install_ios: '在 iPhone 上安装',
                 ios_fallback: '无法安装？直接下载 .ipa',
+                install_testflight: '通过 TestFlight 安装',
+                ota_fallback: 'TestFlight 无法使用？直接安装 .ipa',
+                testflight_steps: [
+                    '在 iPhone 上使用 <strong>Safari</strong> 打开此页面。',
+                    '点击 <strong>通过 TestFlight 安装</strong>。',
+                    '<strong>TestFlight</strong> 应用会打开。若未安装，会先打开 App Store——安装后再次点击链接。',
+                    '点击 <strong>安装</strong> 获取 ERL。',
+                    '从主屏幕启动 ERL。'
+                ],
+                testflight_note: 'TestFlight 是 Apple 官方的测试版分发方式，无需 UDID 或描述文件。',
                 feature1_title: '实时消息',
                 feature1_desc: '即时对话与实时通知。',
                 feature2_title: '语音与视频通话',
@@ -681,6 +701,16 @@
                 download: 'Télécharger',
                 install_ios: 'Installer sur iPhone',
                 ios_fallback: "L'installation ne fonctionne pas ? Télécharger le .ipa",
+                install_testflight: 'Installer via TestFlight',
+                ota_fallback: "TestFlight ne fonctionne pas ? Installer le .ipa directement",
+                testflight_steps: [
+                    'Ouvrez cette page dans <strong>Safari</strong> sur votre iPhone.',
+                    'Appuyez sur <strong>Installer via TestFlight</strong>.',
+                    "L'application <strong>TestFlight</strong> s'ouvre. Si elle n'est pas installée, l'App Store s'ouvre d'abord — installez-la puis appuyez à nouveau sur le lien.",
+                    'Appuyez sur <strong>Installer</strong> pour obtenir ERL.',
+                    "Lancez ERL depuis votre écran d'accueil."
+                ],
+                testflight_note: "TestFlight est la distribution bêta officielle d'Apple. Aucun UDID ni profil de provisionnement requis.",
                 feature1_title: 'Messages en direct',
                 feature1_desc: 'Conversations instantanées avec notifications en temps réel.',
                 feature2_title: 'Appels vocaux & vidéo',
@@ -717,6 +747,16 @@
                 download: 'Скачать',
                 install_ios: 'Установить на iPhone',
                 ios_fallback: 'Не устанавливается? Скачать .ipa напрямую',
+                install_testflight: 'Установить через TestFlight',
+                ota_fallback: 'TestFlight не работает? Установить .ipa напрямую',
+                testflight_steps: [
+                    'Откройте эту страницу в <strong>Safari</strong> на iPhone.',
+                    'Нажмите <strong>Установить через TestFlight</strong>.',
+                    'Откроется приложение <strong>TestFlight</strong>. Если его нет, сначала откроется App Store — установите его и нажмите ссылку снова.',
+                    'Нажмите <strong>Установить</strong>, чтобы получить ERL.',
+                    'Запустите ERL с главного экрана.'
+                ],
+                testflight_note: 'TestFlight — официальный способ бета-распространения от Apple. UDID и профиль не нужны.',
                 feature1_title: 'Сообщения в реальном времени',
                 feature1_desc: 'Мгновенные диалоги с уведомлениями в реальном времени.',
                 feature2_title: 'Голосовые и видеозвонки',
@@ -751,6 +791,16 @@
 
         const GITHUB_REPO = 'DALM1/erl-landing';
         const IPA_LATEST_URL = `https://github.com/${GITHUB_REPO}/releases/latest/download/ERL.ipa`;
+
+        // Lien public TestFlight. A remplacer par le vrai lien une fois la build
+        // uploadée sur App Store Connect (TestFlight > lien public), ex.
+        // https://testflight.apple.com/join/XXXXXXXX
+        // Tant que ce champ est vide, la page retombe sur l'installation .ipa (OTA).
+        const TESTFLIGHT_URL = '';
+
+        function isTestFlightActive() {
+            return currentPlatform === 'ios' && isIOS() && !!TESTFLIGHT_URL;
+        }
 
         let currentLang = detectLang();
         let currentPlatform = isIOS() ? 'ios' : (isAndroid() ? 'android' : 'ios');
@@ -797,8 +847,8 @@
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.lang === currentLang);
             });
-            // Re-render version label if release loaded
-            if (latestRelease) updateDownloadButton();
+            // Re-render version label and buttons (TestFlight peut etre actif sans release).
+            updateDownloadButton();
         }
 
         function setLang(lang) {
@@ -846,6 +896,19 @@
                 label.textContent = t('version_format', { tag: latestRelease.tag_name, name: latestRelease.name || '' });
             }
 
+            if (isTestFlightActive()) {
+                // Installation one-click pour tous via TestFlight : aucun UDID requis.
+                btn.removeAttribute('disabled');
+                btn.setAttribute('onclick', '');
+                btn.href = TESTFLIGHT_URL;
+                text.textContent = t('install_testflight');
+                fallback.setAttribute('data-i18n', 'ota_fallback');
+                fallback.textContent = t('ota_fallback');
+                fallback.href = canOta ? otaInstallLink() : ipaUrl;
+                fallback.classList.add('is-visible');
+                return;
+            }
+
             if (asset || canOta) {
                 btn.removeAttribute('disabled');
                 btn.setAttribute('onclick', '');
@@ -854,6 +917,8 @@
                     // Installation directe : iOS recupere le manifeste et installe l'IPA.
                     btn.href = otaInstallLink();
                     text.textContent = t('install_ios');
+                    fallback.setAttribute('data-i18n', 'ios_fallback');
+                    fallback.textContent = t('ios_fallback');
                     fallback.href = ipaUrl;
                     fallback.classList.add('is-visible');
                 } else {
@@ -881,15 +946,17 @@
 
         function showSteps() {
             const isIos = currentPlatform === 'ios';
-            const stepsKey = isIos ? 'ios_steps' : 'android_steps';
+            const testflight = isTestFlightActive();
+            const stepsKey = testflight ? 'testflight_steps' : (isIos ? 'ios_steps' : 'android_steps');
             const steps = I18N[currentLang][stepsKey] || I18N.en[stepsKey];
+            const noteKey = testflight ? 'testflight_note' : (isIos ? 'ios_note' : null);
             const list = document.getElementById('steps-list');
             list.innerHTML = steps.map((s, i) => `
                 <div class="step">
                     <div class="step-number">${i + 1}</div>
                     <div class="step-text">${s}</div>
                 </div>
-            `).join('') + (isIos ? `<p class="steps-note">${t('ios_note')}</p>` : '');
+            `).join('') + (noteKey ? `<p class="steps-note">${t(noteKey)}</p>` : '');
             document.getElementById('steps-overlay').classList.add('active');
         }
 
