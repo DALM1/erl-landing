@@ -7,6 +7,14 @@
     <link rel="icon" type="image/png" href="favicon.png">
     <link rel="apple-touch-icon" href="favicon.png">
     <style>
+        @font-face {
+            font-family: 'Orbitron';
+            src: url('Orbitron-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -15,10 +23,21 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            background: #0a0a14 url('storm11_loop.gif') center center / cover no-repeat fixed;
             min-height: 100vh;
             color: #ffffff;
             overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Dark overlay for readability over the animated background */
+        body::before {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background: rgba(7, 8, 14, 0.55);
+            z-index: 0;
+            pointer-events: none;
         }
 
         .container {
@@ -26,6 +45,7 @@
             margin: 0 auto;
             padding: 2rem;
             position: relative;
+            z-index: 1;
             min-height: 100vh;
         }
 
@@ -39,8 +59,9 @@
         .logo {
             width: 56px;
             height: 56px;
-            border-radius: 14px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            border-radius: 0;
+            box-shadow: none;
+            background: transparent;
         }
 
         .hero {
@@ -56,9 +77,10 @@
         .hero-logo {
             width: 140px;
             height: 140px;
-            border-radius: 32px;
+            border-radius: 0;
             margin-bottom: 2rem;
-            box-shadow: 0 8px 40px rgba(124, 77, 255, 0.4);
+            box-shadow: none;
+            background: transparent;
             animation: float 3s ease-in-out infinite;
         }
 
@@ -68,14 +90,15 @@
         }
 
         h1 {
+            font-family: 'Orbitron', -apple-system, sans-serif;
             font-size: clamp(2.5rem, 6vw, 4.5rem);
-            font-weight: 800;
+            font-weight: 700;
             margin-bottom: 1rem;
             background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            letter-spacing: -0.02em;
+            letter-spacing: 0.05em;
         }
 
         .tagline {
@@ -92,6 +115,7 @@
             min-height: 1.2em;
         }
 
+        /* Glassmorphism download button — matches app style */
         .download-btn {
             display: inline-flex;
             align-items: center;
@@ -100,18 +124,22 @@
             font-size: 1.15rem;
             font-weight: 600;
             color: #fff;
-            background: linear-gradient(135deg, #7c4dff 0%, #536dfe 100%);
-            border: none;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 999px;
             cursor: pointer;
             text-decoration: none;
             transition: all 0.25s ease;
-            box-shadow: 0 6px 30px rgba(124, 77, 255, 0.45);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
         }
 
         .download-btn:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.28);
             transform: translateY(-2px);
-            box-shadow: 0 10px 40px rgba(124, 77, 255, 0.6);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
         }
 
         .download-btn:active {
@@ -124,7 +152,7 @@
         }
 
         .download-btn:disabled {
-            opacity: 0.6;
+            opacity: 0.5;
             cursor: not-allowed;
             transform: none;
         }
@@ -137,26 +165,31 @@
             justify-content: center;
         }
 
+        /* Glassmorphism platform buttons */
         .platform-btn {
             padding: 0.75rem 1.5rem;
             font-size: 0.95rem;
             color: rgba(255, 255, 255, 0.8);
             background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 999px;
             cursor: pointer;
             text-decoration: none;
             transition: all 0.2s ease;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
 
         .platform-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.14);
+            border-color: rgba(255, 255, 255, 0.22);
             color: #fff;
         }
 
         .platform-btn.active {
-            background: rgba(124, 77, 255, 0.3);
-            border-color: rgba(124, 77, 255, 0.6);
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.30);
+            color: #fff;
         }
 
         .features {
@@ -169,15 +202,11 @@
 
         .feature {
             padding: 1.75rem;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.10);
             border-radius: 20px;
-            backdrop-filter: blur(10px);
-        }
-
-        .feature-icon {
-            font-size: 2rem;
-            margin-bottom: 0.75rem;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
         }
 
         .feature h3 {
@@ -246,17 +275,14 @@
 
             <div class="features">
                 <div class="feature">
-                    <div class="feature-icon">💬</div>
                     <h3>Messages en direct</h3>
                     <p>Conversations instantanées avec notifications en temps réel.</p>
                 </div>
                 <div class="feature">
-                    <div class="feature-icon">📞</div>
                     <h3>Appels vocaux & vidéo</h3>
                     <p>Communiquez en haute qualité via WebRTC.</p>
                 </div>
                 <div class="feature">
-                    <div class="feature-icon">🎨</div>
                     <h3>Stories & posts</h3>
                     <p>Partagez vos moments avec photos, vidéos et GIF.</p>
                 </div>
