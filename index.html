@@ -6,11 +6,19 @@
     <title>ERL</title>
     <link rel="icon" type="image/png" href="favicon.png">
     <style>
+        @font-face {
+            font-family: 'Orbitron';
+            src: url('Orbitron-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            background: #000;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -26,7 +34,6 @@
             gap: 2.5rem;
         }
 
-        /* Logo container — holds both halves stacked on top of each other */
         .logo-stage {
             position: relative;
             width: 220px;
@@ -40,27 +47,22 @@
             width: 100%;
             height: 100%;
             object-fit: contain;
-            border-radius: 44px;
+            border-radius: 0;
         }
 
-        /* ER part: left 60% of the logo */
         .er {
             clip-path: inset(0 40% 0 0);
             opacity: 0;
             transform: scale(0.85);
             animation: erIn 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-            filter: drop-shadow(0 8px 40px rgba(124, 77, 255, 0.4));
         }
 
-        /* L part: right 40% of the logo */
         .l {
             clip-path: inset(0 0 0 60%);
             opacity: 0;
-            /* flip around the left edge of the L (which sits at 60% of the image) */
             transform-origin: 60% center;
             transform: rotateY(90deg);
             animation: lFlip 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) 0.45s forwards;
-            filter: drop-shadow(0 8px 40px rgba(124, 77, 255, 0.4));
         }
 
         @keyframes erIn {
@@ -75,17 +77,18 @@
         }
 
         .title {
-            font-size: 1.6rem;
+            font-family: 'Orbitron', -apple-system, sans-serif;
+            font-size: 1.8rem;
             font-weight: 700;
             color: #fff;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.08em;
             opacity: 0;
             animation: fadeUp 0.5s ease 1.1s forwards;
         }
 
         .subtitle {
             font-size: 0.95rem;
-            color: rgba(255, 255, 255, 0.55);
+            color: rgba(255, 255, 255, 0.42);
             margin-top: -1.8rem;
             opacity: 0;
             animation: fadeUp 0.5s ease 1.3s forwards;
@@ -129,11 +132,38 @@
             <img src="favicon.png" alt="L" class="logo-half l">
         </div>
         <div class="title">ERL</div>
-        <div class="subtitle">Chargement…</div>
+        <div class="subtitle" data-i18n="loading">Chargement…</div>
     </div>
-    <div class="skip-hint">Cliquez pour passer</div>
+    <div class="skip-hint" data-i18n="click_to_skip">Cliquez pour passer</div>
 
     <script>
+        // Translations
+        const I18N = {
+            en: { loading: 'Loading…', click_to_skip: 'Click to skip' },
+            zh: { loading: '加载中…', click_to_skip: '点击跳过' },
+            fr: { loading: 'Chargement…', click_to_skip: 'Cliquez pour passer' },
+            ru: { loading: 'Загрузка…', click_to_skip: 'Нажмите чтобы пропустить' }
+        };
+
+        function detectLang() {
+            const nav = (navigator.language || 'en').toLowerCase();
+            if (nav.startsWith('zh')) return 'zh';
+            if (nav.startsWith('fr')) return 'fr';
+            if (nav.startsWith('ru')) return 'ru';
+            return 'en';
+        }
+
+        function applyI18n(lang) {
+            const t = I18N[lang] || I18N.en;
+            document.documentElement.lang = lang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (t[key]) el.textContent = t[key];
+            });
+        }
+
+        applyI18n(detectLang());
+
         let redirected = false;
 
         function goHome() {
@@ -145,10 +175,8 @@
             }, 480);
         }
 
-        // Auto-redirect after the animation
         setTimeout(goHome, 2400);
 
-        // Skip on click / tap / key
         document.body.addEventListener('click', goHome);
         document.addEventListener('keydown', goHome);
     </script>
