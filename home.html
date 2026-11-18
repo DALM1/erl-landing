@@ -50,14 +50,14 @@
 
         .header {
             display: flex;
-            justify-content: flex-end;
+            justify-content: flex-start;
             align-items: center;
             padding: 1rem 0;
         }
 
         .logo {
-            width: 56px;
-            height: 56px;
+            width: 44px;
+            height: 44px;
             border-radius: 0;
             box-shadow: none;
             background: transparent;
@@ -226,6 +226,7 @@
             text-decoration: none;
         }
 
+        /* Installation steps modal */
         .steps-overlay {
             display: none;
             position: fixed;
@@ -423,6 +424,7 @@
         </footer>
     </div>
 
+    <!-- Installation steps overlay -->
     <div class="steps-overlay" id="steps-overlay">
         <div class="steps-panel">
             <h2 data-i18n="steps_title">Comment installer ERL</h2>
@@ -432,6 +434,7 @@
         </div>
     </div>
 
+    <!-- Language switcher -->
     <div class="lang-switcher">
         <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
         <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">中文</button>
@@ -440,6 +443,7 @@
     </div>
 
     <script>
+        // ===== Translations =====
         const I18N = {
             en: {
                 tagline: 'Real-time social messaging. Chat, share, stay connected.',
@@ -601,9 +605,11 @@
                 const key = el.getAttribute('data-i18n');
                 el.textContent = t(key);
             });
+            // Update lang switcher active state
             document.querySelectorAll('.lang-btn').forEach(btn => {
                 btn.classList.toggle('active', btn.dataset.lang === currentLang);
             });
+            // Re-render version label if release loaded
             if (latestRelease) updateDownloadButton();
         }
 
@@ -663,8 +669,10 @@
             }
         }
 
+        // Show installation steps when download button is clicked
         document.getElementById('download-btn').addEventListener('click', function(e) {
             if (this.hasAttribute('disabled')) return;
+            // Let the download start, then show steps
             showSteps();
         });
 
@@ -685,6 +693,7 @@
             document.getElementById('steps-overlay').classList.remove('active');
         }
 
+        // Close overlay on backdrop click
         document.getElementById('steps-overlay').addEventListener('click', function(e) {
             if (e.target === this) closeSteps();
         });
