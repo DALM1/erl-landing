@@ -164,6 +164,24 @@
             transform: none;
         }
 
+        .ios-fallback {
+            display: none;
+            margin-top: 1rem;
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.55);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            max-width: 90%;
+        }
+
+        .ios-fallback.is-visible {
+            display: inline-block;
+        }
+
+        .ios-fallback:hover {
+            color: #fff;
+        }
+
         .platforms {
             display: flex;
             gap: 1rem;
@@ -326,6 +344,17 @@
 
         .step-text strong {
             color: #fff;
+        }
+
+        .steps-note {
+            margin-top: 1.25rem;
+            padding: 0.85rem 1rem;
+            font-size: 0.85rem;
+            line-height: 1.45;
+            color: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
         }
 
         .steps-close {
@@ -525,6 +554,8 @@
                 <span id="download-text" data-i18n="download">Télécharger</span>
             </a>
 
+            <a href="#" id="ios-fallback" class="ios-fallback" data-i18n="ios_fallback">L'installation ne fonctionne pas ? Télécharger le .ipa</a>
+
             <div class="platforms">
                 <a href="#" class="platform-btn active" data-platform="ios" onclick="selectPlatform(event, 'ios')">iOS</a>
                 <a href="#" class="platform-btn" data-platform="android" onclick="selectPlatform(event, 'android')">Android</a>
@@ -576,6 +607,8 @@
                 tagline: 'Real-time social messaging. Chat, share, stay connected.',
                 loading_version: 'Loading latest version…',
                 download: 'Download',
+                install_ios: 'Install on iPhone',
+                ios_fallback: 'Installation not working? Download the .ipa directly',
                 feature1_title: 'Live messages',
                 feature1_desc: 'Instant conversations with real-time notifications.',
                 feature2_title: 'Voice & video calls',
@@ -588,12 +621,13 @@
                 steps_subtitle: 'Follow these steps to launch the app',
                 close: 'Close',
                 ios_steps: [
-                    'Open this page on your iPhone and tap the <strong>Download iOS</strong> button.',
-                    'A <strong>.ipa</strong> file will be downloaded. Open it via <strong>Files</strong> app.',
-                    'Install using <strong>Sideloadly</strong>, <strong>AltStore</strong>, or Xcode → Devices and Simulators.',
-                    'Trust the developer certificate: <strong>Settings → General → VPN & Device Management</strong>.',
+                    'Open this page in <strong>Safari</strong> on your iPhone.',
+                    'Tap <strong>Install on iPhone</strong>.',
+                    'Confirm with <strong>Install</strong> when iOS asks. The .ipa downloads and installs automatically.',
+                    'If the app does not open: <strong>Settings → General → VPN &amp; Device Management</strong> → trust the developer certificate.',
                     'Launch ERL from your home screen.'
                 ],
+                ios_note: 'Your iPhone must be registered in the app provisioning profile (ad-hoc build). If nothing happens, use the .ipa download link below the button.',
                 android_steps: [
                     'Open this page on your Android phone and tap <strong>Download Android</strong>.',
                     'Once downloaded, tap the <strong>.apk</strong> file to install.',
@@ -609,6 +643,8 @@
                 tagline: '实时社交消息。聊天、分享、保持联系。',
                 loading_version: '正在加载最新版本…',
                 download: '下载',
+                install_ios: '在 iPhone 上安装',
+                ios_fallback: '无法安装？直接下载 .ipa',
                 feature1_title: '实时消息',
                 feature1_desc: '即时对话与实时通知。',
                 feature2_title: '语音与视频通话',
@@ -621,12 +657,13 @@
                 steps_subtitle: '按照以下步骤启动应用',
                 close: '关闭',
                 ios_steps: [
-                    '在 iPhone 上打开此页面，点击 <strong>下载 iOS</strong> 按钮。',
-                    '将下载 <strong>.ipa</strong> 文件，通过 <strong>文件</strong> 应用打开。',
-                    '使用 <strong>Sideloadly</strong>、<strong>AltStore</strong> 或 Xcode → 设备和模拟器进行安装。',
-                    '信任开发者证书：<strong>设置 → 通用 → VPN 与设备管理</strong>。',
+                    '在 iPhone 上使用 <strong>Safari</strong> 打开此页面。',
+                    '点击 <strong>在 iPhone 上安装</strong>。',
+                    '当 iOS 提示时点击 <strong>安装</strong>，<strong>.ipa</strong> 会自动下载并安装。',
+                    '如果应用无法打开：<strong>设置 → 通用 → VPN 与设备管理</strong> → 信任开发者证书。',
                     '从主屏幕启动 ERL。'
                 ],
+                ios_note: '您的 iPhone 必须已登记在应用的描述文件中（ad-hoc 构建）。若无反应，请使用按钮下方的 .ipa 下载链接。',
                 android_steps: [
                     '在安卓手机上打开此页面，点击 <strong>下载 Android</strong>。',
                     '下载完成后，点击 <strong>.apk</strong> 文件进行安装。',
@@ -642,6 +679,8 @@
                 tagline: 'Messagerie sociale temps réel. Discute, partage, reste connecté.',
                 loading_version: 'Chargement de la dernière version…',
                 download: 'Télécharger',
+                install_ios: 'Installer sur iPhone',
+                ios_fallback: "L'installation ne fonctionne pas ? Télécharger le .ipa",
                 feature1_title: 'Messages en direct',
                 feature1_desc: 'Conversations instantanées avec notifications en temps réel.',
                 feature2_title: 'Appels vocaux & vidéo',
@@ -654,12 +693,13 @@
                 steps_subtitle: 'Suivez ces étapes pour lancer l\'application',
                 close: 'Fermer',
                 ios_steps: [
-                    'Ouvrez cette page sur votre iPhone et appuyez sur le bouton <strong>Télécharger iOS</strong>.',
-                    'Un fichier <strong>.ipa</strong> sera téléchargé. Ouvrez-le via l\'app <strong>Fichiers</strong>.',
-                    'Installez avec <strong>Sideloadly</strong>, <strong>AltStore</strong>, ou Xcode → Appareils et simulateurs.',
-                    'Faites confiance au certificat : <strong>Réglages → Général → VPN et gestion des appareils</strong>.',
+                    'Ouvrez cette page dans <strong>Safari</strong> sur votre iPhone.',
+                    'Appuyez sur <strong>Installer sur iPhone</strong>.',
+                    'Confirmez avec <strong>Installer</strong> quand iOS le demande. Le .ipa se télécharge et s\'installe automatiquement.',
+                    'Si l\'app ne s\'ouvre pas : <strong>Réglages → Général → VPN et gestion des appareils</strong> → faites confiance au certificat.',
                     'Lancez ERL depuis votre écran d\'accueil.'
                 ],
+                ios_note: 'Votre iPhone doit être enregistré dans le profil de provisionnement de l\'app (build ad-hoc). Si rien ne se passe, utilisez le lien .ipa sous le bouton.',
                 android_steps: [
                     'Ouvrez cette page sur votre téléphone Android et appuyez sur <strong>Télécharger Android</strong>.',
                     'Une fois téléchargé, appuyez sur le fichier <strong>.apk</strong> pour installer.',
@@ -675,6 +715,8 @@
                 tagline: 'Социальный мессенджинг в реальном времени. Общайтесь, делитесь, оставайтесь на связи.',
                 loading_version: 'Загрузка последней версии…',
                 download: 'Скачать',
+                install_ios: 'Установить на iPhone',
+                ios_fallback: 'Не устанавливается? Скачать .ipa напрямую',
                 feature1_title: 'Сообщения в реальном времени',
                 feature1_desc: 'Мгновенные диалоги с уведомлениями в реальном времени.',
                 feature2_title: 'Голосовые и видеозвонки',
@@ -687,12 +729,13 @@
                 steps_subtitle: 'Следуйте этим шагам, чтобы запустить приложение',
                 close: 'Закрыть',
                 ios_steps: [
-                    'Откройте эту страницу на iPhone и нажмите кнопку <strong>Скачать iOS</strong>.',
-                    'Загрузится файл <strong>.ipa</strong>. Откройте его через приложение <strong>Файлы</strong>.',
-                    'Установите с помощью <strong>Sideloadly</strong>, <strong>AltStore</strong> или Xcode → Устройства и симуляторы.',
-                    'Доверьте сертификату разработчика: <strong>Настройки → Основные → VPN и управление устройством</strong>.',
+                    'Откройте эту страницу в <strong>Safari</strong> на iPhone.',
+                    'Нажмите <strong>Установить на iPhone</strong>.',
+                    'Подтвердите <strong>Установить</strong>, когда iOS спросит. Файл <strong>.ipa</strong> загрузится и установится автоматически.',
+                    'Если приложение не открывается: <strong>Настройки → Основные → VPN и управление устройством</strong> → доверьте сертификату.',
                     'Запустите ERL с главного экрана.'
                 ],
+                ios_note: 'Ваш iPhone должен быть зарегистрирован в профиле приложения (ad-hoc сборка). Если ничего не происходит, используйте ссылку .ipa под кнопкой.',
                 android_steps: [
                     'Откройте эту страницу на телефоне Android и нажмите <strong>Скачать Android</strong>.',
                     'После загрузки нажмите на файл <strong>.apk</strong> для установки.',
@@ -706,8 +749,11 @@
             }
         };
 
+        const GITHUB_REPO = 'DALM1/erl-landing';
+        const IPA_LATEST_URL = `https://github.com/${GITHUB_REPO}/releases/latest/download/ERL.ipa`;
+
         let currentLang = detectLang();
-        let currentPlatform = 'ios';
+        let currentPlatform = isIOS() ? 'ios' : (isAndroid() ? 'android' : 'ios');
         let latestRelease = null;
 
         function detectLang() {
@@ -716,6 +762,21 @@
             if (nav.startsWith('fr')) return 'fr';
             if (nav.startsWith('ru')) return 'ru';
             return 'en';
+        }
+
+        function isIOS() {
+            return /iphone|ipad|ipod/i.test(navigator.userAgent) ||
+                (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+        }
+
+        function isAndroid() {
+            return /android/i.test(navigator.userAgent);
+        }
+
+        // Lien OTA : iOS telecharge le manifeste puis installe l'IPA directement.
+        function otaInstallLink() {
+            const manifestUrl = new URL('manifest.plist', window.location.href).href;
+            return `itms-services://?action=download-manifest&url=${encodeURIComponent(manifestUrl)}`;
         }
 
         function t(key, vars) {
@@ -775,20 +836,35 @@
             const btn = document.getElementById('download-btn');
             const text = document.getElementById('download-text');
             const label = document.getElementById('version-label');
+            const fallback = document.getElementById('ios-fallback');
             const asset = findAsset(latestRelease, currentPlatform);
+            const ipaUrl = asset ? asset.browser_download_url : IPA_LATEST_URL;
+            // OTA possible : iPhone/iPad + release publiee, quel que soit l'asset trouve.
+            const canOta = currentPlatform === 'ios' && isIOS() && !!latestRelease;
 
             if (latestRelease) {
                 label.textContent = t('version_format', { tag: latestRelease.tag_name, name: latestRelease.name || '' });
             }
 
-            if (asset) {
-                btn.href = asset.browser_download_url;
+            if (asset || canOta) {
                 btn.removeAttribute('disabled');
                 btn.setAttribute('onclick', '');
-                const sizeMB = (asset.size / (1024 * 1024)).toFixed(1);
-                text.textContent = `${t('download')} ${t(currentPlatform).toUpperCase()} (${sizeMB} Mo)`;
+
+                if (canOta) {
+                    // Installation directe : iOS recupere le manifeste et installe l'IPA.
+                    btn.href = otaInstallLink();
+                    text.textContent = t('install_ios');
+                    fallback.href = ipaUrl;
+                    fallback.classList.add('is-visible');
+                } else {
+                    btn.href = ipaUrl;
+                    fallback.classList.remove('is-visible');
+                    const sizeMB = asset ? ` (${(asset.size / (1024 * 1024)).toFixed(1)} Mo)` : '';
+                    text.textContent = `${t('download')} ${t(currentPlatform).toUpperCase()}${sizeMB}`;
+                }
             } else {
                 btn.setAttribute('disabled', 'true');
+                fallback.classList.remove('is-visible');
                 text.textContent = `${t('download')} ${t(currentPlatform).toUpperCase()}`;
                 if (latestRelease) {
                     label.textContent = t('not_found', { tag: latestRelease.tag_name, platform: t(currentPlatform) });
@@ -804,7 +880,8 @@
         });
 
         function showSteps() {
-            const stepsKey = currentPlatform === 'ios' ? 'ios_steps' : 'android_steps';
+            const isIos = currentPlatform === 'ios';
+            const stepsKey = isIos ? 'ios_steps' : 'android_steps';
             const steps = I18N[currentLang][stepsKey] || I18N.en[stepsKey];
             const list = document.getElementById('steps-list');
             list.innerHTML = steps.map((s, i) => `
@@ -812,7 +889,7 @@
                     <div class="step-number">${i + 1}</div>
                     <div class="step-text">${s}</div>
                 </div>
-            `).join('');
+            `).join('') + (isIos ? `<p class="steps-note">${t('ios_note')}</p>` : '');
             document.getElementById('steps-overlay').classList.add('active');
         }
 
@@ -827,6 +904,10 @@
 
         (async function init() {
             applyI18n();
+            // Refleter la plateforme detectee sur les boutons de selection.
+            document.querySelectorAll('.platform-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.platform === currentPlatform);
+            });
             latestRelease = await fetchLatestRelease();
             updateDownloadButton();
         })();
