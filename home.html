@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ERL — Messagerie sociale</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="apple-touch-icon" href="favicon.png">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            min-height: 100vh;
+            color: #ffffff;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .header {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            width: 56px;
+            height: 56px;
+            border-radius: 14px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            min-height: calc(100vh - 140px);
+            padding: 2rem 1rem;
+        }
+
+        .hero-logo {
+            width: 140px;
+            height: 140px;
+            border-radius: 32px;
+            margin-bottom: 2rem;
+            box-shadow: 0 8px 40px rgba(124, 77, 255, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-12px); }
+        }
+
+        h1 {
+            font-size: clamp(2.5rem, 6vw, 4.5rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -0.02em;
+        }
+
+        .tagline {
+            font-size: clamp(1rem, 2.5vw, 1.35rem);
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.5rem;
+            max-width: 540px;
+        }
+
+        .version {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 3rem;
+            min-height: 1.2em;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1.1rem 2.5rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #fff;
+            background: linear-gradient(135deg, #7c4dff 0%, #536dfe 100%);
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            box-shadow: 0 6px 30px rgba(124, 77, 255, 0.45);
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 40px rgba(124, 77, 255, 0.6);
+        }
+
+        .download-btn:active {
+            transform: translateY(0);
+        }
+
+        .download-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .download-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .platforms {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .platform-btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 0.95rem;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 999px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .platform-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            color: #fff;
+        }
+
+        .platform-btn.active {
+            background: rgba(124, 77, 255, 0.3);
+            border-color: rgba(124, 77, 255, 0.6);
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 1.5rem;
+            margin-top: 4rem;
+            max-width: 900px;
+        }
+
+        .feature {
+            padding: 1.75rem;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .feature h3 {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature p {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.6);
+            line-height: 1.5;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem 1rem;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.85rem;
+        }
+
+        .footer a {
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+            .hero-logo {
+                width: 100px;
+                height: 100px;
+            }
+            .download-btn {
+                padding: 1rem 2rem;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <img src="favicon.png" alt="ERL" class="logo">
+        </header>
+
+        <main class="hero">
+            <img src="favicon.png" alt="ERL" class="hero-logo">
+            <h1>ERL</h1>
+            <p class="tagline">Messagerie sociale temps réel. Discute, partage, reste connecté.</p>
+            <p class="version" id="version-label">Chargement de la dernière version…</p>
+
+            <a href="#" id="download-btn" class="download-btn" onclick="return false;" disabled>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span id="download-text">Télécharger</span>
+            </a>
+
+            <div class="platforms">
+                <a href="#" class="platform-btn active" data-platform="ios" onclick="selectPlatform(event, 'ios')">iOS</a>
+                <a href="#" class="platform-btn" data-platform="android" onclick="selectPlatform(event, 'android')">Android</a>
+            </div>
+
+            <div class="features">
+                <div class="feature">
+                    <div class="feature-icon">💬</div>
+                    <h3>Messages en direct</h3>
+                    <p>Conversations instantanées avec notifications en temps réel.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📞</div>
+                    <h3>Appels vocaux & vidéo</h3>
+                    <p>Communiquez en haute qualité via WebRTC.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🎨</div>
+                    <h3>Stories & posts</h3>
+                    <p>Partagez vos moments avec photos, vidéos et GIF.</p>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <p>© 2026 ERL. <a href="#" onclick="return false;">CGU</a> · <a href="#" onclick="return false;">Confidentialité</a></p>
+        </footer>
+    </div>
+
+    <script>
+        // Configuration — repo GitHub hébergeant la landing page et les releases
+        const GITHUB_OWNER = 'DALM1';
+        const GITHUB_REPO = 'erl-landing';
+        const PLATFORM_EXTENSIONS = {
+            ios: '.ipa',
+            android: '.apk'
+        };
+
+        let currentPlatform = 'ios';
+        let latestRelease = null;
+
+        // Sélection de la plateforme
+        function selectPlatform(event, platform) {
+            event.preventDefault();
+            currentPlatform = platform;
+            document.querySelectorAll('.platform-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.platform === platform);
+            });
+            updateDownloadButton();
+        }
+
+        // Récupère la dernière release GitHub
+        async function fetchLatestRelease() {
+            try {
+                const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest`);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                return await res.json();
+            } catch (e) {
+                console.warn('Impossible de récupérer la release:', e);
+                return null;
+            }
+        }
+
+        // Trouve l'asset correspondant à la plateforme
+        function findAsset(release, platform) {
+            if (!release || !release.assets) return null;
+            const ext = PLATFORM_EXTENSIONS[platform];
+            return release.assets.find(a => a.name && a.name.endsWith(ext));
+        }
+
+        // Met à jour le bouton de téléchargement
+        function updateDownloadButton() {
+            const btn = document.getElementById('download-btn');
+            const text = document.getElementById('download-text');
+            const label = document.getElementById('version-label');
+            const asset = findAsset(latestRelease, currentPlatform);
+
+            if (latestRelease) {
+                label.textContent = `Version ${latestRelease.tag_name} · ${latestRelease.name || ''}`;
+            }
+
+            if (asset) {
+                btn.href = asset.browser_download_url;
+                btn.removeAttribute('disabled');
+                btn.setAttribute('onclick', '');
+                const sizeMB = (asset.size / (1024 * 1024)).toFixed(1);
+                text.textContent = `Télécharger ${currentPlatform.toUpperCase()} (${sizeMB} Mo)`;
+            } else {
+                btn.setAttribute('disabled', 'true');
+                text.textContent = `Télécharger ${currentPlatform.toUpperCase()}`;
+                if (latestRelease) {
+                    label.textContent = `Version ${latestRelease.tag_name} — fichier ${currentPlatform.toUpperCase()} introuvable`;
+                }
+            }
+        }
+
+        // Initialisation
+        (async function init() {
+            latestRelease = await fetchLatestRelease();
+            updateDownloadButton();
+        })();
+    </script>
+</body>
+</html>
