@@ -30,7 +30,6 @@
             position: relative;
         }
 
-        /* Dark overlay for readability over the animated background */
         body::before {
             content: '';
             position: fixed;
@@ -94,11 +93,8 @@
             font-size: clamp(2.5rem, 6vw, 4.5rem);
             font-weight: 700;
             margin-bottom: 1rem;
-            background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.42);
+            letter-spacing: 0.08em;
         }
 
         .tagline {
@@ -115,7 +111,6 @@
             min-height: 1.2em;
         }
 
-        /* Glassmorphism download button — matches app style */
         .download-btn {
             display: inline-flex;
             align-items: center;
@@ -165,7 +160,6 @@
             justify-content: center;
         }
 
-        /* Glassmorphism platform buttons */
         .platform-btn {
             padding: 0.75rem 1.5rem;
             font-size: 0.95rem;
@@ -232,18 +226,153 @@
             text-decoration: none;
         }
 
+        .steps-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 100;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .steps-overlay.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .steps-panel {
+            background: rgba(15, 15, 25, 0.92);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 24px;
+            padding: 2.5rem;
+            max-width: 520px;
+            width: 100%;
+            max-height: 85vh;
+            overflow-y: auto;
+            backdrop-filter: blur(24px);
+            -webkit-backdrop-filter: blur(24px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .steps-panel h2 {
+            font-family: 'Orbitron', -apple-system, sans-serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.85);
+            margin-bottom: 0.5rem;
+            letter-spacing: 0.04em;
+        }
+
+        .steps-subtitle {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.9rem;
+            margin-bottom: 1.75rem;
+        }
+
+        .step {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .step:last-of-type {
+            border-bottom: none;
+        }
+
+        .step-number {
+            flex-shrink: 0;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #fff;
+        }
+
+        .step-text {
+            color: rgba(255, 255, 255, 0.75);
+            font-size: 0.95rem;
+            line-height: 1.5;
+            padding-top: 5px;
+        }
+
+        .step-text strong {
+            color: #fff;
+        }
+
+        .steps-close {
+            display: block;
+            width: 100%;
+            margin-top: 1.5rem;
+            padding: 0.9rem;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #fff;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+        }
+
+        .steps-close:hover {
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.28);
+        }
+
+        .lang-switcher {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.4rem;
+            z-index: 50;
+        }
+
+        .lang-btn {
+            padding: 0.4rem 0.7rem;
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .lang-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.12);
+        }
+
+        .lang-btn.active {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.16);
+            border-color: rgba(255, 255, 255, 0.25);
+        }
+
         @media (max-width: 600px) {
-            .container {
-                padding: 1rem;
-            }
-            .hero-logo {
-                width: 100px;
-                height: 100px;
-            }
-            .download-btn {
-                padding: 1rem 2rem;
-                font-size: 1rem;
-            }
+            .container { padding: 1rem; }
+            .hero-logo { width: 100px; height: 100px; }
+            .download-btn { padding: 1rem 2rem; font-size: 1rem; }
+            .steps-panel { padding: 1.5rem; }
         }
     </style>
 </head>
@@ -256,8 +385,8 @@
         <main class="hero">
             <img src="favicon.png" alt="ERL" class="hero-logo">
             <h1>ERL</h1>
-            <p class="tagline">Messagerie sociale temps réel. Discute, partage, reste connecté.</p>
-            <p class="version" id="version-label">Chargement de la dernière version…</p>
+            <p class="tagline" data-i18n="tagline">Messagerie sociale temps réel. Discute, partage, reste connecté.</p>
+            <p class="version" id="version-label" data-i18n="loading_version">Chargement de la dernière version…</p>
 
             <a href="#" id="download-btn" class="download-btn" onclick="return false;" disabled>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
@@ -265,7 +394,7 @@
                     <polyline points="7 10 12 15 17 10"></polyline>
                     <line x1="12" y1="15" x2="12" y2="3"></line>
                 </svg>
-                <span id="download-text">Télécharger</span>
+                <span id="download-text" data-i18n="download">Télécharger</span>
             </a>
 
             <div class="platforms">
@@ -275,38 +404,214 @@
 
             <div class="features">
                 <div class="feature">
-                    <h3>Messages en direct</h3>
-                    <p>Conversations instantanées avec notifications en temps réel.</p>
+                    <h3 data-i18n="feature1_title">Messages en direct</h3>
+                    <p data-i18n="feature1_desc">Conversations instantanées avec notifications en temps réel.</p>
                 </div>
                 <div class="feature">
-                    <h3>Appels vocaux & vidéo</h3>
-                    <p>Communiquez en haute qualité via WebRTC.</p>
+                    <h3 data-i18n="feature2_title">Appels vocaux & vidéo</h3>
+                    <p data-i18n="feature2_desc">Communiquez en haute qualité via WebRTC.</p>
                 </div>
                 <div class="feature">
-                    <h3>Stories & posts</h3>
-                    <p>Partagez vos moments avec photos, vidéos et GIF.</p>
+                    <h3 data-i18n="feature3_title">Stories & posts</h3>
+                    <p data-i18n="feature3_desc">Partagez vos moments avec photos, vidéos et GIF.</p>
                 </div>
             </div>
         </main>
 
         <footer class="footer">
-            <p>© 2026 ERL. <a href="#" onclick="return false;">CGU</a> · <a href="#" onclick="return false;">Confidentialité</a></p>
+            <p>© 2026 ERL. <a href="#" onclick="return false;" data-i18n="terms">CGU</a> · <a href="#" onclick="return false;" data-i18n="privacy">Confidentialité</a></p>
         </footer>
     </div>
 
+    <div class="steps-overlay" id="steps-overlay">
+        <div class="steps-panel">
+            <h2 data-i18n="steps_title">Comment installer ERL</h2>
+            <p class="steps-subtitle" data-i18n="steps_subtitle">Suivez ces étapes pour lancer l'application</p>
+            <div id="steps-list"></div>
+            <button class="steps-close" id="steps-close" onclick="closeSteps()" data-i18n="close">Fermer</button>
+        </div>
+    </div>
+
+    <div class="lang-switcher">
+        <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" data-lang="zh" onclick="setLang('zh')">中文</button>
+        <button class="lang-btn" data-lang="fr" onclick="setLang('fr')">FR</button>
+        <button class="lang-btn" data-lang="ru" onclick="setLang('ru')">RU</button>
+    </div>
+
     <script>
-        // Configuration — repo GitHub hébergeant la landing page et les releases
-        const GITHUB_OWNER = 'DALM1';
-        const GITHUB_REPO = 'erl-landing';
-        const PLATFORM_EXTENSIONS = {
-            ios: '.ipa',
-            android: '.apk'
+        const I18N = {
+            en: {
+                tagline: 'Real-time social messaging. Chat, share, stay connected.',
+                loading_version: 'Loading latest version…',
+                download: 'Download',
+                feature1_title: 'Live messages',
+                feature1_desc: 'Instant conversations with real-time notifications.',
+                feature2_title: 'Voice & video calls',
+                feature2_desc: 'Communicate in high quality via WebRTC.',
+                feature3_title: 'Stories & posts',
+                feature3_desc: 'Share your moments with photos, videos and GIFs.',
+                terms: 'Terms',
+                privacy: 'Privacy',
+                steps_title: 'How to install ERL',
+                steps_subtitle: 'Follow these steps to launch the app',
+                close: 'Close',
+                ios_steps: [
+                    'Open this page on your iPhone and tap the <strong>Download iOS</strong> button.',
+                    'A <strong>.ipa</strong> file will be downloaded. Open it via <strong>Files</strong> app.',
+                    'Install using <strong>Sideloadly</strong>, <strong>AltStore</strong>, or Xcode → Devices and Simulators.',
+                    'Trust the developer certificate: <strong>Settings → General → VPN & Device Management</strong>.',
+                    'Launch ERL from your home screen.'
+                ],
+                android_steps: [
+                    'Open this page on your Android phone and tap <strong>Download Android</strong>.',
+                    'Once downloaded, tap the <strong>.apk</strong> file to install.',
+                    'If prompted, allow <strong>installation from unknown sources</strong>.',
+                    'Open ERL from your app drawer.'
+                ],
+                ios: 'iOS',
+                android: 'Android',
+                version_format: 'Version {tag} · {name}',
+                not_found: 'Version {tag} — {platform} file not found'
+            },
+            zh: {
+                tagline: '实时社交消息。聊天、分享、保持联系。',
+                loading_version: '正在加载最新版本…',
+                download: '下载',
+                feature1_title: '实时消息',
+                feature1_desc: '即时对话与实时通知。',
+                feature2_title: '语音与视频通话',
+                feature2_desc: '通过 WebRTC 进行高质量通信。',
+                feature3_title: '动态与帖子',
+                feature3_desc: '用照片、视频和 GIF 分享你的精彩时刻。',
+                terms: '服务条款',
+                privacy: '隐私政策',
+                steps_title: '如何安装 ERL',
+                steps_subtitle: '按照以下步骤启动应用',
+                close: '关闭',
+                ios_steps: [
+                    '在 iPhone 上打开此页面，点击 <strong>下载 iOS</strong> 按钮。',
+                    '将下载 <strong>.ipa</strong> 文件，通过 <strong>文件</strong> 应用打开。',
+                    '使用 <strong>Sideloadly</strong>、<strong>AltStore</strong> 或 Xcode → 设备和模拟器进行安装。',
+                    '信任开发者证书：<strong>设置 → 通用 → VPN 与设备管理</strong>。',
+                    '从主屏幕启动 ERL。'
+                ],
+                android_steps: [
+                    '在安卓手机上打开此页面，点击 <strong>下载 Android</strong>。',
+                    '下载完成后，点击 <strong>.apk</strong> 文件进行安装。',
+                    '如提示，请允许 <strong>从未知来源安装</strong>。',
+                    '从应用列表打开 ERL。'
+                ],
+                ios: 'iOS',
+                android: '安卓',
+                version_format: '版本 {tag} · {name}',
+                not_found: '版本 {tag} — 未找到 {platform} 文件'
+            },
+            fr: {
+                tagline: 'Messagerie sociale temps réel. Discute, partage, reste connecté.',
+                loading_version: 'Chargement de la dernière version…',
+                download: 'Télécharger',
+                feature1_title: 'Messages en direct',
+                feature1_desc: 'Conversations instantanées avec notifications en temps réel.',
+                feature2_title: 'Appels vocaux & vidéo',
+                feature2_desc: 'Communiquez en haute qualité via WebRTC.',
+                feature3_title: 'Stories & posts',
+                feature3_desc: 'Partagez vos moments avec photos, vidéos et GIF.',
+                terms: 'CGU',
+                privacy: 'Confidentialité',
+                steps_title: 'Comment installer ERL',
+                steps_subtitle: 'Suivez ces étapes pour lancer l\'application',
+                close: 'Fermer',
+                ios_steps: [
+                    'Ouvrez cette page sur votre iPhone et appuyez sur le bouton <strong>Télécharger iOS</strong>.',
+                    'Un fichier <strong>.ipa</strong> sera téléchargé. Ouvrez-le via l\'app <strong>Fichiers</strong>.',
+                    'Installez avec <strong>Sideloadly</strong>, <strong>AltStore</strong>, ou Xcode → Appareils et simulateurs.',
+                    'Faites confiance au certificat : <strong>Réglages → Général → VPN et gestion des appareils</strong>.',
+                    'Lancez ERL depuis votre écran d\'accueil.'
+                ],
+                android_steps: [
+                    'Ouvrez cette page sur votre téléphone Android et appuyez sur <strong>Télécharger Android</strong>.',
+                    'Une fois téléchargé, appuyez sur le fichier <strong>.apk</strong> pour installer.',
+                    'Si demandé, autorisez <strong>l\'installation depuis des sources inconnues</strong>.',
+                    'Ouvrez ERL depuis votre tiroir d\'applications.'
+                ],
+                ios: 'iOS',
+                android: 'Android',
+                version_format: 'Version {tag} · {name}',
+                not_found: 'Version {tag} — fichier {platform} introuvable'
+            },
+            ru: {
+                tagline: 'Социальный мессенджинг в реальном времени. Общайтесь, делитесь, оставайтесь на связи.',
+                loading_version: 'Загрузка последней версии…',
+                download: 'Скачать',
+                feature1_title: 'Сообщения в реальном времени',
+                feature1_desc: 'Мгновенные диалоги с уведомлениями в реальном времени.',
+                feature2_title: 'Голосовые и видеозвонки',
+                feature2_desc: 'Общение в высоком качестве через WebRTC.',
+                feature3_title: 'Сторис и посты',
+                feature3_desc: 'Делитесь моментами с помощью фото, видео и GIF.',
+                terms: 'Условия',
+                privacy: 'Конфиденциальность',
+                steps_title: 'Как установить ERL',
+                steps_subtitle: 'Следуйте этим шагам, чтобы запустить приложение',
+                close: 'Закрыть',
+                ios_steps: [
+                    'Откройте эту страницу на iPhone и нажмите кнопку <strong>Скачать iOS</strong>.',
+                    'Загрузится файл <strong>.ipa</strong>. Откройте его через приложение <strong>Файлы</strong>.',
+                    'Установите с помощью <strong>Sideloadly</strong>, <strong>AltStore</strong> или Xcode → Устройства и симуляторы.',
+                    'Доверьте сертификату разработчика: <strong>Настройки → Основные → VPN и управление устройством</strong>.',
+                    'Запустите ERL с главного экрана.'
+                ],
+                android_steps: [
+                    'Откройте эту страницу на телефоне Android и нажмите <strong>Скачать Android</strong>.',
+                    'После загрузки нажмите на файл <strong>.apk</strong> для установки.',
+                    'При запросе разрешите <strong>установку из неизвестных источников</strong>.',
+                    'Откройте ERL из списка приложений.'
+                ],
+                ios: 'iOS',
+                android: 'Android',
+                version_format: 'Версия {tag} · {name}',
+                not_found: 'Версия {tag} — файл {platform} не найден'
+            }
         };
 
+        let currentLang = detectLang();
         let currentPlatform = 'ios';
         let latestRelease = null;
 
-        // Sélection de la plateforme
+        function detectLang() {
+            const nav = (navigator.language || 'en').toLowerCase();
+            if (nav.startsWith('zh')) return 'zh';
+            if (nav.startsWith('fr')) return 'fr';
+            if (nav.startsWith('ru')) return 'ru';
+            return 'en';
+        }
+
+        function t(key, vars) {
+            let str = (I18N[currentLang] && I18N[currentLang][key]) || I18N.en[key] || key;
+            if (vars) {
+                Object.keys(vars).forEach(k => { str = str.replace('{' + k + '}', vars[k]); });
+            }
+            return str;
+        }
+
+        function applyI18n() {
+            document.documentElement.lang = currentLang;
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                el.textContent = t(key);
+            });
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.lang === currentLang);
+            });
+            if (latestRelease) updateDownloadButton();
+        }
+
+        function setLang(lang) {
+            currentLang = lang;
+            applyI18n();
+        }
+
         function selectPlatform(event, platform) {
             event.preventDefault();
             currentPlatform = platform;
@@ -316,10 +621,9 @@
             updateDownloadButton();
         }
 
-        // Récupère la dernière release GitHub
         async function fetchLatestRelease() {
             try {
-                const res = await fetch(`https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/releases/latest`);
+                const res = await fetch(`https://api.github.com/repos/DALM1/erl-landing/releases/latest`);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 return await res.json();
             } catch (e) {
@@ -328,14 +632,12 @@
             }
         }
 
-        // Trouve l'asset correspondant à la plateforme
         function findAsset(release, platform) {
             if (!release || !release.assets) return null;
-            const ext = PLATFORM_EXTENSIONS[platform];
+            const ext = { ios: '.ipa', android: '.apk' }[platform];
             return release.assets.find(a => a.name && a.name.endsWith(ext));
         }
 
-        // Met à jour le bouton de téléchargement
         function updateDownloadButton() {
             const btn = document.getElementById('download-btn');
             const text = document.getElementById('download-text');
@@ -343,7 +645,7 @@
             const asset = findAsset(latestRelease, currentPlatform);
 
             if (latestRelease) {
-                label.textContent = `Version ${latestRelease.tag_name} · ${latestRelease.name || ''}`;
+                label.textContent = t('version_format', { tag: latestRelease.tag_name, name: latestRelease.name || '' });
             }
 
             if (asset) {
@@ -351,18 +653,44 @@
                 btn.removeAttribute('disabled');
                 btn.setAttribute('onclick', '');
                 const sizeMB = (asset.size / (1024 * 1024)).toFixed(1);
-                text.textContent = `Télécharger ${currentPlatform.toUpperCase()} (${sizeMB} Mo)`;
+                text.textContent = `${t('download')} ${t(currentPlatform).toUpperCase()} (${sizeMB} Mo)`;
             } else {
                 btn.setAttribute('disabled', 'true');
-                text.textContent = `Télécharger ${currentPlatform.toUpperCase()}`;
+                text.textContent = `${t('download')} ${t(currentPlatform).toUpperCase()}`;
                 if (latestRelease) {
-                    label.textContent = `Version ${latestRelease.tag_name} — fichier ${currentPlatform.toUpperCase()} introuvable`;
+                    label.textContent = t('not_found', { tag: latestRelease.tag_name, platform: t(currentPlatform) });
                 }
             }
         }
 
-        // Initialisation
+        document.getElementById('download-btn').addEventListener('click', function(e) {
+            if (this.hasAttribute('disabled')) return;
+            showSteps();
+        });
+
+        function showSteps() {
+            const stepsKey = currentPlatform === 'ios' ? 'ios_steps' : 'android_steps';
+            const steps = I18N[currentLang][stepsKey] || I18N.en[stepsKey];
+            const list = document.getElementById('steps-list');
+            list.innerHTML = steps.map((s, i) => `
+                <div class="step">
+                    <div class="step-number">${i + 1}</div>
+                    <div class="step-text">${s}</div>
+                </div>
+            `).join('');
+            document.getElementById('steps-overlay').classList.add('active');
+        }
+
+        function closeSteps() {
+            document.getElementById('steps-overlay').classList.remove('active');
+        }
+
+        document.getElementById('steps-overlay').addEventListener('click', function(e) {
+            if (e.target === this) closeSteps();
+        });
+
         (async function init() {
+            applyI18n();
             latestRelease = await fetchLatestRelease();
             updateDownloadButton();
         })();
