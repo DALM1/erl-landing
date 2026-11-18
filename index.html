@@ -20,11 +20,13 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #000;
             min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             align-items: center;
             justify-content: center;
             overflow: hidden;
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .splash {
@@ -32,6 +34,7 @@
             flex-direction: column;
             align-items: center;
             gap: 2.5rem;
+            padding: 1rem;
         }
 
         .logo-stage {
@@ -122,6 +125,32 @@
         @keyframes bodyFade {
             0%   { opacity: 1; }
             100% { opacity: 0; }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .logo-stage { width: 180px; height: 180px; }
+            .title { font-size: 1.5rem; }
+            .splash { gap: 2rem; }
+        }
+
+        @media (max-width: 480px) {
+            .logo-stage { width: 150px; height: 150px; }
+            .title { font-size: 1.3rem; }
+            .subtitle { font-size: 0.85rem; margin-top: -1.5rem; }
+            .splash { gap: 1.75rem; }
+            .skip-hint { bottom: 1.25rem; font-size: 0.72rem; }
+        }
+
+        @media (max-width: 360px) {
+            .logo-stage { width: 130px; height: 130px; }
+            .title { font-size: 1.15rem; }
+        }
+
+        @media (max-height: 500px) and (orientation: landscape) {
+            .logo-stage { width: 120px; height: 120px; }
+            .splash { gap: 1.25rem; }
+            .skip-hint { bottom: 0.75rem; }
         }
     </style>
 </head>
