@@ -82,6 +82,11 @@
         .ios-fallback.is-visible { display: inline-block; }
         .ios-fallback:hover { color: #fff; }
 
+        .ipa-direct-btn { display: inline-flex; align-items: center; justify-content: center; gap: 0.6rem; margin-top: 1rem; padding: 0.8rem 1.75rem; font-size: 0.95rem; font-weight: 500; color: rgba(255, 255, 255, 0.9); background: transparent; border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 999px; cursor: pointer; text-decoration: none; transition: all 0.25s ease; max-width: 100%; text-align: center; }
+        .ipa-direct-btn:hover { background: rgba(255, 255, 255, 0.12); border-color: rgba(255, 255, 255, 0.4); color: #fff; }
+        .ipa-direct-btn:active { transform: translateY(0); }
+        .ipa-direct-btn svg { width: 18px; height: 18px; }
+
         .platforms { display: flex; gap: 1rem; margin-top: 2rem; flex-wrap: wrap; justify-content: center; }
         .platform-btn {
             padding: 0.75rem 1.5rem; font-size: 0.95rem; color: rgba(255, 255, 255, 0.8);
@@ -178,6 +183,15 @@
                 <span id="download-text" data-i18n="download">Télécharger</span>
             </a>
 
+            <a href="https://github.com/DALM1/erl-landing/releases/latest/download/ERL.ipa" id="ipa-direct-btn" class="ipa-direct-btn" download>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span data-i18n="download_ipa">Télécharger le fichier .ipa</span>
+            </a>
+
             <a href="#" id="ios-fallback" class="ios-fallback" data-i18n="ios_fallback">L'installation ne fonctionne pas ? Télécharger le .ipa</a>
 
             <div class="platforms">
@@ -230,6 +244,7 @@
                 download: 'Download',
                 install_ios: 'Install on iPhone',
                 ios_fallback: 'Installation not working? Download the .ipa directly',
+                download_ipa: 'Download the .ipa file',
                 install_testflight: 'Install via TestFlight',
                 ota_fallback: 'TestFlight not working? Install the .ipa directly',
                 testflight_steps: [
@@ -276,6 +291,7 @@
                 download: '下载',
                 install_ios: '在 iPhone 上安装',
                 ios_fallback: '无法安装？直接下载 .ipa',
+                download_ipa: '下载 .ipa 文件',
                 install_testflight: '通过 TestFlight 安装',
                 ota_fallback: 'TestFlight 无法使用？直接安装 .ipa',
                 testflight_steps: [
@@ -322,6 +338,7 @@
                 download: 'Télécharger',
                 install_ios: 'Installer sur iPhone',
                 ios_fallback: "L'installation ne fonctionne pas ? Télécharger le .ipa",
+                download_ipa: 'Télécharger le fichier .ipa',
                 install_testflight: 'Installer via TestFlight',
                 ota_fallback: "TestFlight ne fonctionne pas ? Installer le .ipa directement",
                 testflight_steps: [
@@ -368,6 +385,7 @@
                 download: 'Скачать',
                 install_ios: 'Установить на iPhone',
                 ios_fallback: 'Не устанавливается? Скачать .ipa напрямую',
+                download_ipa: 'Скачать файл .ipa',
                 install_testflight: 'Установить через TestFlight',
                 ota_fallback: 'TestFlight не работает? Установить .ipa напрямую',
                 testflight_steps: [
@@ -444,6 +462,8 @@
             const fallback = document.getElementById('ios-fallback');
             const asset = findAsset(latestRelease, currentPlatform);
             const ipaUrl = asset ? asset.browser_download_url : IPA_LATEST_URL;
+            const ipaDirectBtn = document.getElementById('ipa-direct-btn');
+            if (ipaDirectBtn) ipaDirectBtn.href = ipaUrl;
             const canOta = currentPlatform === 'ios' && isIOS() && !!latestRelease;
 
             if (latestRelease) { label.textContent = t('version_format', { tag: latestRelease.tag_name, name: latestRelease.name || '' }); }
