@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Page non listee : exclue des moteurs de recherche et jamais liee depuis le site public. -->
+    <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex">
+    <meta name="referrer" content="no-referrer">
+    <title>ERL</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        @font-face {
+            font-family: 'Orbitron';
+            src: url('Orbitron-Bold.ttf') format('truetype');
+            font-weight: 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #07080e;
+            min-height: 100vh;
+            min-height: 100dvh;
+            color: #e8e8ef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            -webkit-text-size-adjust: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .void {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.18);
+            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+        }
+
+        .card {
+            width: 100%;
+            max-width: 460px;
+            background: rgba(18, 20, 30, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 18px;
+            padding: 2rem 1.75rem;
+            box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+        }
+
+        .card.wide { max-width: 560px; }
+
+        h1 {
+            font-family: 'Orbitron', -apple-system, sans-serif;
+            font-size: 1.15rem;
+            letter-spacing: 0.14em;
+            font-weight: 700;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.35rem;
+        }
+
+        .sub {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.42);
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255, 255, 255, 0.45);
+            margin-bottom: 0.4rem;
+        }
+
+        input[type="text"], input[type="password"] {
+            width: 100%;
+            padding: 0.75rem 0.9rem;
+            margin-bottom: 1rem;
+            background: rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 10px;
+            color: #fff;
+            font-size: 0.95rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        input:focus { border-color: rgba(120, 160, 255, 0.6); }
+
+        button {
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 600;
+            padding: 0.75rem 1.1rem;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: filter 0.15s ease, opacity 0.15s ease;
+        }
+
+        button:disabled { opacity: 0.45; cursor: default; }
+
+        button:hover:not(:disabled) { filter: brightness(1.12); }
+
+        .primary { width: 100%; background: #4b6bfb; color: #fff; }
+
+        .ghost {
+            background: rgba(255, 255, 255, 0.08);
+            color: rgba(255, 255, 255, 0.85);
+        }
+
+        .danger { background: #d9483f; color: #fff; }
+        .warn { background: #d98a3f; color: #fff; }
+        .ok { background: #3f9d5a; color: #fff; }
+
+        .row { display: flex; gap: 0.6rem; align-items: stretch; }
+        .row > input { margin-bottom: 0; }
+        .row > button { flex-shrink: 0; }
+
+        .actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 1rem; }
+        .actions > button { flex: 1 1 auto; }
+
+        .userbox {
+            margin-top: 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.25);
+        }
+
+        .userbox dl { display: grid; grid-template-columns: auto 1fr; gap: 0.3rem 1rem; font-size: 0.85rem; }
+        .userbox dt { color: rgba(255, 255, 255, 0.42); }
+        .userbox dd { color: #fff; word-break: break-word; }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.7rem;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+            letter-spacing: 0.06em;
+        }
+        .badge.clean { background: rgba(63, 157, 90, 0.18); color: #7fd79a; }
+        .badge.banned { background: rgba(217, 72, 63, 0.18); color: #f0928c; }
+
+        .head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.25rem;
+        }
+
+        .head .who { font-size: 0.8rem; color: rgba(255, 255, 255, 0.5); }
+        .head .who b { color: #fff; }
+
+        .log {
+            margin-top: 1.25rem;
+            font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+            font-size: 0.78rem;
+            line-height: 1.5;
+            color: rgba(255, 255, 255, 0.6);
+            max-height: 180px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .log .err { color: #f0928c; }
+        .log .ok { color: #7fd79a; }
+
+        .msg { min-height: 1.1em; font-size: 0.82rem; margin-top: 0.5rem; color: rgba(255, 255, 255, 0.5); }
+        .msg.err { color: #f0928c; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+    <div id="void" class="void">Page introuvable</div>
+
+    <main id="app" class="hidden">
+        <!-- Ecran de connexion -->
+        <section id="login" class="card">
+            <h1>ERL</h1>
+            <p class="sub">Accès réservé</p>
+            <form id="login-form" autocomplete="off">
+                <label for="u">Identifiant</label>
+                <input type="text" id="u" autocapitalize="off" autocorrect="off" spellcheck="false">
+                <label for="p">Mot de passe</label>
+                <input type="password" id="p">
+                <button type="submit" class="primary">Entrer</button>
+            </form>
+            <div id="login-msg" class="msg"></div>
+        </section>
+
+        <!-- Console -->
+        <section id="console" class="card wide hidden">
+            <div class="head">
+                <div class="who">Connecté : <b id="who"></b></div>
+                <button id="logout" class="ghost">Quitter</button>
+            </div>
+
+            <label for="q">Compte à cibler</label>
+            <div class="row">
+                <input type="text" id="q" placeholder="nom d'utilisateur" autocapitalize="off" autocorrect="off" spellcheck="false">
+                <button id="search" class="ghost">Rechercher</button>
+            </div>
+
+            <div id="userbox" class="userbox hidden">
+                <dl>
+                    <dt>Nom</dt><dd id="f-username"></dd>
+                    <dt>Afficher</dt><dd id="f-display"></dd>
+                    <dt>ID</dt><dd id="f-id"></dd>
+                    <dt>État</dt><dd id="f-state"></dd>
+                    <dt>Motif</dt><dd id="f-reason"></dd>
+                </dl>
+
+                <label for="reason" style="margin-top:1rem">Motif (optionnel)</label>
+                <input type="text" id="reason" maxlength="280" placeholder="raison de la sanction">
+
+                <div class="actions">
+                    <button id="ban" class="warn">Bannir</button>
+                    <button id="unban" class="ok">Débannir</button>
+                    <button id="del" class="danger">Supprimer</button>
+                </div>
+            </div>
+
+            <div id="log" class="log"></div>
+        </section>
+    </main>
+
+    <script>
+        "use strict";
+
+        // API publique (edge mustelinet). Le controle d'acces reel est fait cote serveur :
+        // seuls les comptes de ERL_ADMIN_USERNAMES peuvent appeler /admin/*.
+        var API = "https://2xpw4vcfwanye.46bd6e51.apps.mustelinet.com";
+        var GATE = "#ops"; // fragment requis pour afficher la page
+
+        var $ = function (id) { return document.getElementById(id); };
+        var TOKEN = "";
+        var CURRENT = null;
+
+        try { TOKEN = sessionStorage.getItem("erl_ops_tok") || ""; } catch (e) { TOKEN = ""; }
+
+        function show(el, on) { el.classList.toggle("hidden", !on); }
+
+        function log(text, kind) {
+            var box = $("log");
+            var line = document.createElement("div");
+            if (kind) { line.className = kind; }
+            line.textContent = "· " + text;
+            box.appendChild(line);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        function stamp() {
+            var d = new Date();
+            return d.toLocaleTimeString();
+        }
+
+        function setToken(t) {
+            TOKEN = t || "";
+            try {
+                if (TOKEN) { sessionStorage.setItem("erl_ops_tok", TOKEN); }
+                else { sessionStorage.removeItem("erl_ops_tok"); }
+            } catch (e) { /* stockage indisponible : on garde le token en memoire */ }
+        }
+
+        // Appel API JSON. Leve un objet { message } en cas d'echec.
+        function api(path, opts) {
+            opts = opts || {};
+            var headers = { "content-type": "application/json" };
+            if (opts.auth !== false && TOKEN) { headers["authorization"] = "Bearer " + TOKEN; }
+
+            return fetch(API + path, {
+                method: opts.method || "GET",
+                headers: headers,
+                body: opts.body ? JSON.stringify(opts.body) : undefined
+            }).then(function (res) {
+                return res.text().then(function (txt) {
+                    var data = null;
+                    if (txt) { try { data = JSON.parse(txt); } catch (e) { data = null; } }
+                    if (!res.ok) {
+                        var err = new Error(((data && data.error) || ("HTTP " + res.status)));
+                        err.code = (data && data.error) || String(res.status);
+                        err.status = res.status;
+                        throw err;
+                    }
+                    return data || {};
+                });
+            }).catch(function (e) {
+                if (e && e.status) { throw e; }
+                var n = new Error("réseau injoignable");
+                n.code = "network";
+                throw n;
+            });
+        }
+
+        var MESSAGES = {
+            invalid: "identifiants invalides",
+            unauthorized: "identifiants invalides",
+            account_banned: "ce compte est suspendu",
+            forbidden: "accès refusé",
+            user_not_found: "compte introuvable",
+            username_required: "nom manquant",
+            cannot_target_self: "impossible de viser son propre compte",
+            confirmation_required: "confirmation incorrecte",
+            network: "réseau injoignable"
+        };
+
+        function humanize(e) {
+            return MESSAGES[e.code] || e.message || "erreur";
+        }
+
+        // --- Connexion -------------------------------------------------------
+
+        function doLogin(ev) {
+            ev.preventDefault();
+            var msg = $("login-msg");
+            msg.className = "msg";
+            msg.textContent = "Connexion…";
+
+            api("/auth/login", {
+                method: "POST",
+                auth: false,
+                body: { username: $("u").value.trim(), password: $("p").value }
+            }).then(function (r) {
+                if (!r || !r.token) { throw new Error("réponse invalide"); }
+                setToken(r.token);
+                return verify();
+            }).catch(function (e) {
+                setToken("");
+                msg.className = "msg err";
+                msg.textContent = humanize(e);
+            });
+        }
+
+        function verify() {
+            return api("/admin/me").then(function (me) {
+                $("who").textContent = me.username;
+                show($("login"), false);
+                show($("console"), true);
+                log(stamp() + "  session ouverte");
+                $("p").value = "";
+            }).catch(function (e) {
+                setToken("");
+                var msg = $("login-msg");
+                msg.className = "msg err";
+                msg.textContent = humanize(e);
+            });
+        }
+
+        function logout() {
+            setToken("");
+            CURRENT = null;
+            show($("console"), false);
+            show($("login"), true);
+            show($("userbox"), false);
+            $("log").textContent = "";
+            $("login-msg").textContent = "";
+            $("u").value = "";
+            $("p").value = "";
+            $("q").value = "";
+        }
+
+        // --- Console ---------------------------------------------------------
+
+        function renderUser(u) {
+            CURRENT = u;
+            $("f-username").textContent = u.username || "";
+            $("f-display").textContent = u.display_name || "—";
+            $("f-id").textContent = u.id != null ? u.id : "—";
+            $("f-state").innerHTML = u.banned
+                ? '<span class="badge banned">SUSPENDU</span>'
+                : '<span class="badge clean">ACTIF</span>';
+            $("f-reason").textContent = u.ban_reason || "—";
+            $("reason").value = u.ban_reason || "";
+            show($("userbox"), true);
+        }
+
+        function search() {
+            var username = $("q").value.trim();
+            if (!username) { return; }
+            api("/admin/lookup", { method: "POST", body: { username: username } })
+                .then(function (r) { renderUser(r.user); })
+                .catch(function (e) { show($("userbox"), false); log("recherche : " + humanize(e), "err"); });
+        }
+
+        function act(path, body, label) {
+            if (!CURRENT) { return; }
+            body = body || {};
+            body.username = CURRENT.username;
+            api(path, { method: "POST", body: body }).then(function (r) {
+                if (r && r.user) { renderUser(r.user); }
+                log(label + " : OK — " + (r && r.username ? r.username : CURRENT.username), "ok");
+            }).catch(function (e) {
+                log(label + " : " + humanize(e), "err");
+            });
+        }
+
+        function ban() {
+            act("/admin/ban", { reason: $("reason").value.trim() }, "bannissement");
+        }
+
+        function unban() {
+            act("/admin/unban", {}, "débannissement");
+        }
+
+        function remove() {
+            if (!CURRENT) { return; }
+            var typed = window.prompt("Suppression définitive. Tapez « " + CURRENT.username + " » pour confirmer :");
+            if (typed === null) { return; }
+            if (typed.trim().toLowerCase() !== String(CURRENT.username).toLowerCase()) {
+                log("suppression : confirmation incorrecte", "err");
+                return;
+            }
+            api("/admin/delete", { method: "POST", body: { username: CURRENT.username, confirm: typed.trim() } })
+                .then(function (r) {
+                    log("suppression : compte « " + (r && r.username ? r.username : CURRENT.username) + " » supprimé", "ok");
+                    CURRENT = null;
+                    show($("userbox"), false);
+                    $("q").value = "";
+                })
+                .catch(function (e) { log("suppression : " + humanize(e), "err"); });
+        }
+
+        // --- Amorçage --------------------------------------------------------
+
+        function boot() {
+            // Sans fragment d'accès, la page reste sur « Page introuvable ».
+            if (location.hash !== GATE) { return; }
+            show($("void"), false);
+            show($("app"), true);
+            if (TOKEN) { verify(); }
+
+            $("login-form").addEventListener("submit", doLogin);
+            $("logout").addEventListener("click", logout);
+            $("search").addEventListener("click", search);
+            $("q").addEventListener("keydown", function (e) { if (e.key === "Enter") { search(); } });
+            $("ban").addEventListener("click", ban);
+            $("unban").addEventListener("click", unban);
+            $("del").addEventListener("click", remove);
+        }
+
+        boot();
+    </script>
+</body>
+</html>
