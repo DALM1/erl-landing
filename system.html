@@ -113,10 +113,6 @@
             color: rgba(255, 255, 255, 0.85);
         }
 
-        .danger { background: #d9483f; color: #fff; }
-        .warn { background: #d98a3f; color: #fff; }
-        .ok { background: #3f9d5a; color: #fff; }
-
         .row { display: flex; gap: 0.6rem; align-items: stretch; }
         .row > input { margin-bottom: 0; }
         .row > button { flex-shrink: 0; }
@@ -175,6 +171,352 @@
         .msg.err { color: #f0928c; }
 
         .hidden { display: none !important; }
+
+        @font-face {
+            font-family: 'Rajdhani';
+            src: url('Rajdhani-Variable.ttf') format('truetype');
+            font-weight: 300 700;
+            font-style: normal;
+            font-display: swap;
+        }
+
+        :root {
+            color-scheme: dark;
+            --surface: rgba(16, 18, 23, 0.84);
+            --surface-border: rgba(255, 255, 255, 0.12);
+            --input-bg: rgba(255, 255, 255, 0.05);
+            --accent: #4b6bfb;
+            --text: #f7f1f1;
+            --muted: rgba(255, 255, 255, 0.62);
+        }
+
+        body {
+            position: relative;
+            overflow-x: hidden;
+            font-family: 'Rajdhani', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background:
+                radial-gradient(ellipse at 18% 12%, rgba(75, 107, 251, 0.13), transparent 38rem),
+                radial-gradient(ellipse at 84% 88%, rgba(91, 70, 180, 0.11), transparent 34rem),
+                #060608;
+            color: var(--text);
+            padding: clamp(1rem, 3vw, 2.5rem);
+        }
+
+        #app {
+            width: min(1120px, 100%);
+            margin: auto;
+        }
+
+        .void {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            letter-spacing: 0.1em;
+        }
+
+        .card,
+        .glass-panel {
+            background: var(--surface);
+            border: 1px solid var(--surface-border);
+            border-radius: 28px;
+            box-shadow:
+                0 28px 80px rgba(0, 0, 0, 0.46),
+                inset 0 1px 0 rgba(255, 255, 255, 0.035);
+            -webkit-backdrop-filter: blur(28px) saturate(135%);
+            backdrop-filter: blur(28px) saturate(135%);
+        }
+
+        .card {
+            width: min(100%, 430px);
+            max-width: 430px;
+            padding: clamp(1.5rem, 5vw, 2.6rem);
+            margin: auto;
+        }
+
+        .card.wide { max-width: none; }
+
+        h1 {
+            font-size: 1.8rem;
+            letter-spacing: 0.12em;
+            text-align: center;
+            margin-bottom: 0.35rem;
+        }
+
+        .sub {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.05rem;
+            text-align: center;
+            margin-bottom: 1.65rem;
+        }
+
+        label {
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            min-height: 50px;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1rem;
+            background: var(--input-bg);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 16px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1.05rem;
+        }
+
+        input:focus {
+            border-color: rgba(75, 107, 251, 0.72);
+            box-shadow: 0 0 0 3px rgba(75, 107, 251, 0.13);
+        }
+
+        button {
+            min-height: 44px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1rem;
+            font-weight: 700;
+            border: 1px solid transparent;
+            border-radius: 14px;
+            transition: transform 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+        }
+
+        button:hover:not(:disabled) {
+            filter: none;
+            transform: translateY(-1px);
+        }
+
+        button:focus-visible {
+            outline: 2px solid rgba(126, 151, 255, 0.9);
+            outline-offset: 3px;
+        }
+
+        .primary {
+            min-height: 52px;
+            background: var(--accent);
+            border-color: rgba(142, 160, 255, 0.25);
+            border-radius: 16px;
+            box-shadow: 0 10px 28px rgba(75, 107, 251, 0.24);
+            color: #fff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85rem;
+            letter-spacing: 0.04em;
+        }
+
+        .ghost,
+        .action-neutral,
+        .refresh-button {
+            color: rgba(255, 255, 255, 0.88);
+            background: rgba(255, 255, 255, 0.055);
+            border-color: rgba(255, 255, 255, 0.11);
+            -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
+        }
+
+        .ghost:hover:not(:disabled),
+        .action-neutral:hover:not(:disabled),
+        .refresh-button:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.19);
+        }
+
+        .danger {
+            color: #ffe3e3;
+            background: rgba(210, 55, 65, 0.2);
+            border-color: rgba(255, 129, 137, 0.25);
+            box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06);
+            -webkit-backdrop-filter: blur(14px);
+            backdrop-filter: blur(14px);
+        }
+
+        .danger:hover:not(:disabled) {
+            background: rgba(210, 55, 65, 0.32);
+            border-color: rgba(255, 129, 137, 0.4);
+        }
+
+        .row { gap: 0.75rem; }
+        .row > button { min-width: 118px; }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.65rem;
+        }
+
+        .actions > button { min-width: 0; }
+
+        .userbox {
+            background: rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.075);
+            border-radius: 18px;
+        }
+
+        .userbox dl {
+            grid-template-columns: 80px minmax(0, 1fr);
+            gap: 0.45rem 0.75rem;
+            font-size: 1rem;
+        }
+
+        .head .who { font-family: 'Rajdhani', sans-serif; font-size: 1rem; }
+
+        .admin-workspace { width: 100%; }
+
+        .workspace-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            padding: 0.25rem 0.15rem;
+        }
+
+        .workspace-brand {
+            display: flex;
+            align-items: center;
+            gap: 0.9rem;
+        }
+
+        .workspace-brand h1 {
+            margin: 0;
+            font-size: 1rem;
+            text-align: left;
+        }
+
+        .workspace-brand span,
+        .workspace-session {
+            color: var(--muted);
+            font-size: 0.95rem;
+        }
+
+        .workspace-session b { color: var(--text); }
+
+        .workspace-session {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+        }
+
+        .admin-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
+            align-items: start;
+            gap: 1rem;
+        }
+
+        .glass-panel { padding: clamp(1.15rem, 3vw, 1.7rem); }
+
+        .panel-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.9rem;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.4rem;
+        }
+
+        .panel-subtitle {
+            color: var(--muted);
+            font-size: 0.95rem;
+            margin-bottom: 1.2rem;
+        }
+
+        .reports-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .refresh-button {
+            min-height: 38px;
+            padding: 0.45rem 0.75rem;
+            white-space: nowrap;
+        }
+
+        .reports-status {
+            min-height: 1.25rem;
+            margin-bottom: 0.65rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .reports-list {
+            display: grid;
+            gap: 0.65rem;
+            max-height: min(570px, 65vh);
+            overflow-y: auto;
+            padding-right: 0.2rem;
+        }
+
+        .report-card {
+            padding: 0.9rem;
+            border: 1px solid rgba(255, 255, 255, 0.075);
+            border-radius: 16px;
+            background: rgba(0, 0, 0, 0.19);
+        }
+
+        .report-top,
+        .report-target-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .report-type {
+            color: #c7d1ff;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.62rem;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+        }
+
+        .report-date,
+        .report-detail {
+            color: var(--muted);
+            font-size: 0.85rem;
+        }
+
+        .report-target {
+            margin: 0.55rem 0 0.2rem;
+            font-size: 1.05rem;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        .report-reason { color: #f2f2f7; font-size: 0.95rem; }
+
+        .report-action {
+            min-height: 34px;
+            padding: 0.3rem 0.65rem;
+            font-size: 0.85rem;
+            white-space: nowrap;
+        }
+
+        .log {
+            max-height: 150px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 0.9rem;
+        }
+
+        .msg,
+        .log .ok { color: #aebaff; }
+
+        @media (max-width: 760px) {
+            body { align-items: flex-start; padding: 1rem; }
+            .admin-grid { grid-template-columns: minmax(0, 1fr); }
+            .workspace-head { align-items: flex-start; }
+            .workspace-brand span { display: none; }
+            .reports-list { max-height: 55vh; }
+        }
+
+        @media (max-width: 440px) {
+            .row { flex-direction: column; }
+            .row > button { width: 100%; }
+            .actions { grid-template-columns: minmax(0, 1fr); }
+            .workspace-session { gap: 0.45rem; font-size: 0.85rem; }
+            .userbox dl { grid-template-columns: 64px minmax(0, 1fr); }
+            .report-top { align-items: flex-start; flex-direction: column; gap: 0.15rem; }
+        }
     </style>
 </head>
 <body>
@@ -195,40 +537,65 @@
             <div id="login-msg" class="msg"></div>
         </section>
 
-        <!-- Console -->
-        <section id="console" class="card wide hidden">
-            <div class="head">
-                <div class="who">Connecté : <b id="who"></b></div>
-                <button id="logout" class="ghost">Quitter</button>
-            </div>
-
-            <label for="q">Compte à cibler</label>
-            <div class="row">
-                <input type="text" id="q" placeholder="nom d'utilisateur" autocapitalize="off" autocorrect="off" spellcheck="false">
-                <button id="search" class="ghost">Rechercher</button>
-            </div>
-
-            <div id="userbox" class="userbox hidden">
-                <dl>
-                    <dt>Nom</dt><dd id="f-username"></dd>
-                    <dt>Afficher</dt><dd id="f-display"></dd>
-                    <dt>ID</dt><dd id="f-id"></dd>
-                    <dt>État</dt><dd id="f-state"></dd>
-                    <dt>Motif</dt><dd id="f-reason"></dd>
-                </dl>
-
-                <label for="reason" style="margin-top:1rem">Motif (optionnel)</label>
-                <input type="text" id="reason" maxlength="280" placeholder="raison de la sanction">
-
-                <div class="actions">
-                    <button id="ban" class="warn">Bannir</button>
-                    <button id="unban" class="ok">Débannir</button>
-                    <button id="del" class="danger">Supprimer</button>
+        <!-- Console d'administration, visible uniquement après validation serveur du compte admin. -->
+        <div id="console" class="admin-workspace hidden">
+            <header class="workspace-head">
+                <div class="workspace-brand">
+                    <h1>ERL</h1>
+                    <span>CONSOLE PRIVÉE</span>
                 </div>
-            </div>
+                <div class="workspace-session">
+                    <span>Connecté : <b id="who"></b></span>
+                    <button id="logout" class="ghost" type="button">Quitter</button>
+                </div>
+            </header>
 
-            <div id="log" class="log"></div>
-        </section>
+            <div class="admin-grid">
+                <section class="glass-panel manage-panel" aria-labelledby="manage-title">
+                    <h2 id="manage-title" class="panel-title">Gestion des comptes</h2>
+                    <p class="panel-subtitle">Recherche et actions de modération rapides.</p>
+
+                    <label for="q">Compte à cibler</label>
+                    <div class="row">
+                        <input type="text" id="q" placeholder="Nom d'utilisateur" autocapitalize="off" autocorrect="off" spellcheck="false">
+                        <button id="search" class="ghost" type="button">Rechercher</button>
+                    </div>
+
+                    <div id="userbox" class="userbox hidden">
+                        <dl>
+                            <dt>Nom</dt><dd id="f-username"></dd>
+                            <dt>Afficher</dt><dd id="f-display"></dd>
+                            <dt>ID</dt><dd id="f-id"></dd>
+                            <dt>État</dt><dd id="f-state"></dd>
+                            <dt>Motif</dt><dd id="f-reason"></dd>
+                        </dl>
+
+                        <label for="reason" style="margin-top:1rem">Motif (optionnel)</label>
+                        <input type="text" id="reason" maxlength="280" placeholder="Raison de la sanction">
+
+                        <div class="actions">
+                            <button id="ban" class="action-neutral" type="button">Bannir</button>
+                            <button id="unban" class="action-neutral" type="button">Débannir</button>
+                            <button id="del" class="danger" type="button">Supprimer</button>
+                        </div>
+                    </div>
+
+                    <div id="log" class="log" aria-live="polite"></div>
+                </section>
+
+                <aside class="glass-panel reports-panel" aria-labelledby="reports-title">
+                    <div class="reports-head">
+                        <div>
+                            <h2 id="reports-title" class="panel-title">Signalements récents</h2>
+                            <p class="panel-subtitle">Publications, commentaires et messages.</p>
+                        </div>
+                        <button id="reports-refresh" class="refresh-button" type="button">Actualiser</button>
+                    </div>
+                    <div id="reports-status" class="reports-status" role="status">Chargement des signalements…</div>
+                    <div id="reports-list" class="reports-list" aria-live="polite"></div>
+                </aside>
+            </div>
+        </div>
     </main>
 
     <script>
@@ -254,6 +621,109 @@
             line.textContent = "· " + text;
             box.appendChild(line);
             box.scrollTop = box.scrollHeight;
+        }
+
+        function reportKindLabel(kind) {
+            return {
+                post: "Publication",
+                comment: "Commentaire",
+                message: "Message"
+            }[kind] || "Signalement";
+        }
+
+        function reportReasonLabel(reason) {
+            return {
+                spam: "Spam",
+                inappropriate: "Contenu inapproprié"
+            }[reason] || reason || "Motif non précisé";
+        }
+
+        function renderReports(reports) {
+            var list = $("reports-list");
+            list.textContent = "";
+
+            if (!reports.length) {
+                $("reports-status").textContent = "Aucun signalement récent.";
+                return;
+            }
+
+            $("reports-status").textContent =
+                reports.length + " signalement" + (reports.length > 1 ? "s" : "") +
+                " récent" + (reports.length > 1 ? "s" : "");
+
+            reports.forEach(function (report) {
+                var card = document.createElement("article");
+                card.className = "report-card";
+
+                var top = document.createElement("div");
+                top.className = "report-top";
+                var type = document.createElement("span");
+                type.className = "report-type";
+                type.textContent = reportKindLabel(report.kind);
+                var date = document.createElement("time");
+                date.className = "report-date";
+                date.dateTime = report.inserted_at || "";
+                var parsedDate = new Date(report.inserted_at);
+                date.textContent = Number.isNaN(parsedDate.getTime())
+                    ? "Date inconnue"
+                    : parsedDate.toLocaleString("fr-FR", { dateStyle: "short", timeStyle: "short" });
+                top.appendChild(type);
+                top.appendChild(date);
+
+                var targetRow = document.createElement("div");
+                targetRow.className = "report-target-row";
+                var target = document.createElement("p");
+                target.className = "report-target";
+                target.textContent = report.reported_username
+                    ? "@" + report.reported_username
+                    : "Compte indisponible";
+                targetRow.appendChild(target);
+
+                if (report.reported_username) {
+                    var targetButton = document.createElement("button");
+                    targetButton.type = "button";
+                    targetButton.className = "ghost report-action";
+                    targetButton.textContent = "Cibler";
+                    targetButton.addEventListener("click", function () {
+                        $("q").value = report.reported_username;
+                        search();
+                    });
+                    targetRow.appendChild(targetButton);
+                }
+
+                var detail = document.createElement("p");
+                detail.className = "report-detail";
+                detail.textContent = "Signalé par @" + (report.reporter_username || "compte supprimé");
+
+                var reason = document.createElement("p");
+                reason.className = "report-reason";
+                reason.textContent = reportReasonLabel(report.reason);
+
+                var reference = document.createElement("p");
+                reference.className = "report-detail";
+                reference.textContent = "Réf. " + String(report.subject_id || "—");
+
+                card.appendChild(top);
+                card.appendChild(targetRow);
+                card.appendChild(detail);
+                card.appendChild(reason);
+                card.appendChild(reference);
+                list.appendChild(card);
+            });
+        }
+
+        function loadReports() {
+            var refresh = $("reports-refresh");
+            refresh.disabled = true;
+            $("reports-status").textContent = "Chargement des signalements…";
+
+            api("/admin/reports?limit=20").then(function (result) {
+                renderReports(Array.isArray(result.reports) ? result.reports : []);
+            }).catch(function (e) {
+                $("reports-status").textContent = "Chargement impossible : " + humanize(e);
+            }).finally(function () {
+                refresh.disabled = false;
+            });
         }
 
         function stamp() {
@@ -345,6 +815,7 @@
                 show($("console"), true);
                 log(stamp() + "  session ouverte");
                 $("p").value = "";
+                loadReports();
             }).catch(function (e) {
                 setToken("");
                 var msg = $("login-msg");
@@ -443,6 +914,7 @@
             $("ban").addEventListener("click", ban);
             $("unban").addEventListener("click", unban);
             $("del").addEventListener("click", remove);
+            $("reports-refresh").addEventListener("click", loadReports);
         }
 
         boot();
