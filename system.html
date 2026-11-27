@@ -453,6 +453,51 @@
             padding-right: 0.2rem;
         }
 
+        .export-panel { grid-column: 1 / -1; }
+
+        .export-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 0.85rem;
+        }
+
+        .export-field { min-width: 0; }
+
+        .export-grid input,
+        .export-grid select {
+            width: 100%;
+            min-height: 48px;
+            padding: 0.7rem 0.85rem;
+            margin: 0;
+            color: #fff;
+            background: var(--input-bg);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 14px;
+            font: inherit;
+        }
+
+        .export-grid select option { color: #fff; background: #17191f; }
+
+        .export-note {
+            color: var(--muted);
+            font-size: 0.9rem;
+            line-height: 1.45;
+            margin: 1rem 0;
+        }
+
+        .export-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.65rem;
+        }
+
+        .export-status {
+            min-height: 1.3rem;
+            margin-top: 0.8rem;
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
         .report-card {
             padding: 0.9rem;
             border: 1px solid rgba(255, 255, 255, 0.075);
@@ -522,6 +567,7 @@
             .workspace-session { gap: 0.45rem; font-size: 0.85rem; }
             .userbox dl { grid-template-columns: 64px minmax(0, 1fr); }
             .report-top { align-items: flex-start; flex-direction: column; gap: 0.15rem; }
+            .export-grid { grid-template-columns: minmax(0, 1fr); }
         }
     </style>
 </head>
@@ -600,6 +646,53 @@
                     <div id="reports-status" class="reports-status" role="status">Chargement des signalements…</div>
                     <div id="reports-list" class="reports-list" aria-live="polite"></div>
                 </aside>
+
+                <section class="glass-panel export-panel" aria-labelledby="export-title">
+                    <h2 id="export-title" class="panel-title">Export des messages</h2>
+                    <p class="panel-subtitle">Télécharger un rapport ciblé des messages et de leurs relations.</p>
+
+                    <div class="export-grid">
+                        <div class="export-field">
+                            <label for="export-username">Compte (facultatif)</label>
+                            <input type="text" id="export-username" placeholder="Nom d'utilisateur" autocapitalize="off" autocorrect="off" spellcheck="false">
+                        </div>
+                        <div class="export-field">
+                            <label for="export-group">Groupe (nom ou ID, facultatif)</label>
+                            <input type="text" id="export-group" placeholder="Nom ou identifiant du groupe" autocapitalize="off" autocorrect="off" spellcheck="false">
+                        </div>
+                        <div class="export-field">
+                            <label for="export-conversation">Conversations</label>
+                            <select id="export-conversation">
+                                <option value="all">Messages privés et groupes</option>
+                                <option value="direct">Messages privés seulement</option>
+                                <option value="group">Messages de groupes seulement</option>
+                            </select>
+                        </div>
+                        <div class="export-field">
+                            <label for="export-from">Depuis le</label>
+                            <input type="date" id="export-from">
+                        </div>
+                        <div class="export-field">
+                            <label for="export-to">Jusqu'au</label>
+                            <input type="date" id="export-to">
+                        </div>
+                        <div class="export-field">
+                            <label for="export-reason">Motif obligatoire (5 à 280 caractères)</label>
+                            <input type="text" id="export-reason" maxlength="280" placeholder="Motif de consultation/export">
+                        </div>
+                    </div>
+
+                    <p class="export-note">
+                        Les rôles et appartenances sont un snapshot daté au moment de l'export ; l'historique
+                        des entrées, sorties et changements de rôle n'est pas conservé. Le contenu est exporté
+                        tel qu'enregistré côté serveur et n'est pas déchiffré.
+                    </p>
+                    <div class="export-actions">
+                        <button id="export-csv" class="action-neutral" type="button">Télécharger CSV</button>
+                        <button id="export-json" class="action-neutral" type="button">Télécharger JSON</button>
+                    </div>
+                    <div id="export-status" class="export-status" role="status" aria-live="polite"></div>
+                </section>
             </div>
         </div>
     </main>
@@ -732,6 +825,138 @@
             });
         }
 
+        function exportFilename(format) {
+            return "erl-messages-" + new Date().toISOString().slice(0, 10) + "." + format;
+        }
+
+        function exportError(response) {
+            return response.text().then(function (text) {
+                var payload = null;
+                if (text) { try { payload = JSON.parse(text); } catch (e) { payload = null; } }
+                var err = new Error((payload && payload.error) || ("HTTP " + response.status));
+                err.code = (payload && payload.error) || String(response.status);
+                err.status = response.status;
+                throw err;
+            });
+        }
+
+        function saveResponse(response, fileHandle, filename) {
+            var reader = response.body && response.body.getReader ? response.body.getReader() : null;
+            var chunks = [];
+            var writerPromise = fileHandle ? fileHandle.createWritable() : Promise.resolve(null);
+            return writerPromise.then(function (writer) {
+                function readNext() {
+                    if (!reader) {
+                        return response.blob().then(function (blob) {
+                            return writer ? writer.write(blob).then(function () { return writer; }) : blob;
+                        }).then(function (result) {
+                            if (writer) { return writer.close().then(function () { return "saved"; }); }
+                            return downloadBlob(result, filename);
+                        });
+                    }
+
+                    return reader.read().then(function (part) {
+                        if (part.done) {
+                            if (writer) { return writer.close().then(function () { return "saved"; }); }
+                            var blob = new Blob(chunks, { type: response.headers.get("content-type") || "application/octet-stream" });
+                            return downloadBlob(blob, filename);
+                        }
+                        if (writer) {
+                            return writer.write(part.value).then(readNext);
+                        }
+                        chunks.push(part.value);
+                        return readNext();
+                    });
+                }
+                return readNext();
+            });
+        }
+
+        function downloadBlob(blob, filename) {
+            var url = URL.createObjectURL(blob);
+            var link = document.createElement("a");
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            window.setTimeout(function () { URL.revokeObjectURL(url); }, 60000);
+            return "downloaded";
+        }
+
+        function startMessageExport(format) {
+            var reason = $("export-reason").value.trim();
+            if (reason.length < 5 || reason.length > 280) {
+                $("export-status").textContent = "Indiquez un motif de 5 à 280 caractères.";
+                $("export-reason").focus();
+                return;
+            }
+
+            var params = {
+                username: $("export-username").value.trim(),
+                group: $("export-group").value.trim(),
+                from: $("export-from").value,
+                to: $("export-to").value,
+                conversation: $("export-conversation").value,
+                reason: reason,
+                format: format
+            };
+
+            var filename = exportFilename(format);
+            var buttons = [$("export-csv"), $("export-json")];
+            buttons.forEach(function (button) { button.disabled = true; });
+            $("export-status").textContent = "Préparation de l'export…";
+
+            var pickerPromise = Promise.resolve(null);
+            if (typeof window.showSaveFilePicker === "function") {
+                try {
+                    pickerPromise = window.showSaveFilePicker({
+                        suggestedName: filename,
+                        types: [{
+                            description: format.toUpperCase(),
+                            accept: format === "csv"
+                                ? { "text/csv": [".csv"] }
+                                : { "application/json": [".json"] }
+                        }]
+                    }).catch(function (error) {
+                        if (error && error.name === "AbortError") { throw error; }
+                        return null;
+                    });
+                } catch (error) {
+                    pickerPromise = Promise.resolve(null);
+                }
+            }
+
+            pickerPromise.then(function (fileHandle) {
+                return fetch(API + "/admin/messages/export", {
+                    method: "POST",
+                    headers: {
+                        "authorization": "Bearer " + TOKEN,
+                        "content-type": "application/json"
+                    },
+                    body: JSON.stringify(params)
+                }).then(function (response) {
+                    if (!response.ok) { return exportError(response); }
+                    $("export-status").textContent =
+                        "Téléchargement de " + (response.headers.get("x-export-message-count") || "…") + " message(s)…";
+                    return saveResponse(response, fileHandle, filename).then(function () {
+                        $("export-status").textContent =
+                            "Export terminé : " + (response.headers.get("x-export-message-count") || "0") + " message(s).";
+                    });
+                });
+            }).catch(function (error) {
+                if (error && error.name === "AbortError") {
+                    $("export-status").textContent = "Export annulé.";
+                } else if (error && error.code) {
+                    $("export-status").textContent = "Export impossible : " + humanize(error);
+                } else {
+                    $("export-status").textContent = "Export impossible : réseau ou écriture interrompue.";
+                }
+            }).finally(function () {
+                buttons.forEach(function (button) { button.disabled = false; });
+            });
+        }
+
         function stamp() {
             var d = new Date();
             return d.toLocaleTimeString();
@@ -784,7 +1009,14 @@
             username_required: "nom manquant",
             cannot_target_self: "impossible de viser son propre compte",
             confirmation_required: "confirmation incorrecte",
-            network: "réseau injoignable"
+            network: "réseau injoignable",
+            export_reason_required: "motif d'export obligatoire",
+            username_not_found: "compte introuvable",
+            group_not_found: "groupe introuvable",
+            invalid_date: "date invalide",
+            invalid_date_range: "la date de début doit précéder la date de fin",
+            invalid_conversation: "type de conversation invalide",
+            invalid_export_format: "format d'export invalide"
         };
 
         function humanize(e) {
@@ -921,6 +1153,8 @@
             $("unban").addEventListener("click", unban);
             $("del").addEventListener("click", remove);
             $("reports-refresh").addEventListener("click", loadReports);
+            $("export-csv").addEventListener("click", function () { startMessageExport("csv"); });
+            $("export-json").addEventListener("click", function () { startMessageExport("json"); });
         }
 
         boot();
